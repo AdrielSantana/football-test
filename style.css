@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    /* Hide scrollbars */
+}
+
+canvas {
+    display: block;
+}
+
+#ui {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 24px;
+    text-shadow: 2px 2px 4px #000000;
+    z-index: 1;
+    pointer-events: none; /* Allow clicks to pass through to the canvas */
+}
+
+#message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    display: none;
+    /* Hidden by default */
+}
