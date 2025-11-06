@@ -15,7 +15,7 @@ renderer.domElement.addEventListener('mouseup', (event) => {
   const swipeVector = new THREE.Vector2().subVectors(endMouse, startMouse);
 
   // Base force calculation
-  const force = new CANNON.Vec3(swipeVector.x * 0.1, Math.abs(swipeVector.y) * 0.1, -15);
+  const force = new CANNON.Vec3(swipeVector.x * 0.05, Math.abs(swipeVector.y) * 0.05, -15);
 
   // Clamp the force magnitude to a maximum value
   const maxForce = 15;
