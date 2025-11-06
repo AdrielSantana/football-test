@@ -4,25 +4,42 @@ import { scene } from '../scene.js';
 
 class Goalkeeper {
   constructor() {
-    this.width = 1;
     this.height = 1.8;
-    this.mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(this.width, this.height, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0xff0000 })
-    );
-    this.mesh.castShadow = true;
+    const torsoHeight = 1;
+    const headRadius = 0.25;
+
+    // Create a group to hold all the parts of the goalkeeper
+    this.mesh = new THREE.Group();
+
+    // Material
+    const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+
+    // Torso
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, torsoHeight, 16), material);
+    torso.castShadow = true;
+    this.mesh.add(torso);
+
+    // Head
+    const head = new THREE.Mesh(new THREE.SphereGeometry(headRadius, 16, 16), material);
+    head.position.y = torsoHeight / 2 + headRadius;
+    head.castShadow = true;
+    this.mesh.add(head);
+
     scene.add(this.mesh);
 
+    // Physics body
     this.body = new CANNON.Body({
       mass: 80,
-      shape: new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, 0.25)),
-      position: new CANNON.Vec3(0, this.height / 2, 0),
+      position: new CANNON.Vec3(0, 0.5, 0),
       fixedRotation: true,
-      angularDamping: 1.0,
+      // angularDamping: 1,
     });
+    // Compound shape for better physics
+    this.body.addShape(new CANNON.Box(new CANNON.Vec3(0.3, torsoHeight / 2, 0.3)), new CANNON.Vec3(0, 0, 0));
+    this.body.addShape(new CANNON.Sphere(headRadius), new CANNON.Vec3(0, torsoHeight / 2 + headRadius, 0));
     world.addBody(this.body);
 
-    this.direction = 1;
+    this.direction = 1; 1
   }
 
   update() {

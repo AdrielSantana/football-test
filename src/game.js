@@ -38,12 +38,14 @@ const goalkeeper = new Goalkeeper();
 // --- Game Logic & Controls ---
 let isKicked = false;
 let isResetting = false;
+let goalScored = false;
 let kickStartTime = 0;
 
 function kickBall(force) {
   if (isKicked) return;
   isKicked = true;
   isResetting = false; // Allow goal checking again
+  goalScored = false; // Reset goal scored flag
   hideMessage();
 
   ball.body.wakeUp(); // Wake the ball up before applying force
@@ -61,22 +63,23 @@ function resetBall() {
 }
 
 function checkGoal() {
-  if (isResetting) return; // Don't check if we're already resetting
+  if (isResetting || goalScored) return; // Don't check if we're already resetting or goal has been scored
 
   const elapsedTime = performance.now() - kickStartTime;
 
   // Check for a goal
-  if (ball.body.position.z < -goal.depth / 2 &&
+  if (ball.body.position.z < -ball.radius &&
     ball.body.position.y < goal.height &&
     Math.abs(ball.body.position.x) < goal.width / 2) {
     score++;
     updateScore(score);
     showMessage('GOAL!');
+    goalScored = true; // Set goal scored flag
     isResetting = true;
     setTimeout(resetBall, 2000);
   }
   // Check for a miss (out of bounds or timeout)
-  else if (ball.body.position.z < -goal.depth || elapsedTime > 5000) {
+  else if (ball.body.position.z < -goal.depth - ball.radius || elapsedTime > 5000) {
     showMessage('MISS!');
     isResetting = true;
     setTimeout(resetBall, 2000);
