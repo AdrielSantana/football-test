@@ -17,27 +17,31 @@ const textureLoader = new THREE.TextureLoader();
 scene.background = new THREE.Color(0x87CEEB); // Sky blue background
 
 // --- Stadium Stands ---
-const adTexture1 = textureLoader.load('assets/ads_1.png');
-const adTexture2 = textureLoader.load('assets/ads_2.png');
+const adTexture = textureLoader.load('assets/elgin_logo.png');
 
-const adMaterials = [
-    new THREE.MeshStandardMaterial({ map: adTexture1 }),
-    new THREE.MeshStandardMaterial({ map: adTexture2 })
-];
+const adMaterial = new THREE.MeshStandardMaterial({ map: adTexture, transparent: true })
 
-const numAds = 30;
+const numAds = 20;
 const adWidth = 2;
-const adSpacing = 0;
+const adSpacing = 1;
 const totalWidth = numAds * adWidth + (numAds - 1) * adSpacing;
 
 for (let i = 0; i < numAds; i++) {
     const adMesh = new THREE.Mesh(
         new THREE.BoxGeometry(adWidth, 2, 0.5),
-        adMaterials[i % 2]
+        adMaterial
     );
     adMesh.position.set(-totalWidth / 2 + adWidth / 2 + i * (adWidth + adSpacing), 1, -4);
     scene.add(adMesh);
 }
+
+// --- Stadium Walls ---
+
+const backgroundMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+const background = new THREE.Mesh(new THREE.BoxGeometry(40, 3, 1), backgroundMaterial);
+background.position.set(0, 0.5, -4.27);
+background.receiveShadow = true
+scene.add(background);
 
 // --- Field Lines ---
 const lineMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
@@ -47,7 +51,7 @@ goalLine.position.set(0, 0, 0);
 goalLine.receiveShadow = true
 scene.add(goalLine);
 
-const penaltySpot = new THREE.Mesh(new THREE.CircleGeometry(0.25, 16), lineMaterial);
+const penaltySpot = new THREE.Mesh(new THREE.CircleGeometry(0.25, 64), lineMaterial);
 penaltySpot.position.set(0, 0.01, 10);
 penaltySpot.rotation.set(-Math.PI / 2, 0, 0);
 penaltySpot.receiveShadow = true

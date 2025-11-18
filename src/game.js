@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
 import { world, groundMaterial } from './physics.js';
-import { scene, textureLoader } from './scene.js';
+import { scene, textureLoader, renderer } from './scene.js';
 import { updateScore, showMessage, hideMessage } from './ui.js';
 import { Ball } from './components/Ball.js';
 import { Goal } from './components/Goal.js';
@@ -13,11 +13,18 @@ let score = 0;
 const grassTexture = textureLoader.load('assets/grass.jpg');
 grassTexture.wrapS = THREE.RepeatWrapping;
 grassTexture.wrapT = THREE.RepeatWrapping;
-grassTexture.repeat.set(10, 10);
+grassTexture.repeat.set(25, 25);
+grassTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
 const floorMesh = new THREE.Mesh(
   new THREE.PlaneGeometry(100, 100),
-  new THREE.MeshStandardMaterial({ map: grassTexture })
+  new THREE.MeshStandardMaterial({ 
+    map: grassTexture,
+    roughness: 0.8,
+    bumpMap: grassTexture, // Reuse texture for bump
+    bumpScale: 0.05,
+    color: 0xdddddd // Slightly darken to reduce wash-out
+  })
 );
 floorMesh.rotation.x = -Math.PI / 2;
 floorMesh.receiveShadow = true;
