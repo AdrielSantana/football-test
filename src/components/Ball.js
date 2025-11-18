@@ -23,9 +23,10 @@ class Ball {
   }
 
   reset() {
-    this.body.position.set(0, this.radius, 10);
+    this.body.position.set(0, this.radius - 0.01, 10);
     this.body.velocity.set(0, 0, 0);
     this.body.angularVelocity.set(0, 0, 0);
+    this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 0, 0), 0);
     this.body.sleep();
   }
 
