@@ -25,9 +25,9 @@ const adMaterials = [
     new THREE.MeshStandardMaterial({ map: adTexture2 })
 ];
 
-const numAds = 15;
+const numAds = 30;
 const adWidth = 2;
-const adSpacing = 1;
+const adSpacing = 0;
 const totalWidth = numAds * adWidth + (numAds - 1) * adSpacing;
 
 for (let i = 0; i < numAds; i++) {
@@ -54,9 +54,13 @@ penaltySpot.receiveShadow = true
 scene.add(penaltySpot);
 
 // --- Lighting ---
-const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.8);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+scene.add(ambientLight);
+
+const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.2);
 scene.add(hemisphereLight);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
 directionalLight.position.set(-10, 20, 10);
 directionalLight.castShadow = true;
 // Shadow properties
@@ -69,6 +73,25 @@ directionalLight.shadow.camera.right = 20;
 directionalLight.shadow.camera.top = 20;
 directionalLight.shadow.camera.bottom = -20;
 scene.add(directionalLight);
+
+// Spotlights
+const spotLight1 = new THREE.SpotLight(0xffffff, 0.4);
+spotLight1.position.set(15, 25, 15);
+spotLight1.angle = Math.PI / 8;
+spotLight1.penumbra = 0.1;
+spotLight1.castShadow = true;
+spotLight1.target.position.set(0, 0, 0);
+scene.add(spotLight1);
+scene.add(spotLight1.target);
+
+const spotLight2 = new THREE.SpotLight(0xffffff, 0.4);
+spotLight2.position.set(-15, 25, 15);
+spotLight2.angle = Math.PI / 8;
+spotLight2.penumbra = 0.1;
+spotLight2.castShadow = true;
+spotLight2.target.position.set(0, 0, 0);
+scene.add(spotLight2);
+scene.add(spotLight2.target);
 
 // Handle window resize
 window.addEventListener('resize', () => {

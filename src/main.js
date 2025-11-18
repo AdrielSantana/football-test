@@ -14,7 +14,7 @@ function animate() {
   world.step(1 / 60, deltaTime, 3);
 
   // Update game logic
-  update();
+  update(deltaTime);
 
   renderer.render(scene, camera);
 }

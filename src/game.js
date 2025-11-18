@@ -86,8 +86,8 @@ function checkGoal() {
   }
 }
 
-function update() {
-    goalkeeper.update();
+function update(deltaTime) {
+    goalkeeper.update(deltaTime);
 
     // Check for goal or miss
     if (isKicked) {
