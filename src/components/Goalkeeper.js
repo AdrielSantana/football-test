@@ -1,7 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
 import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/FBXLoader.js';
 import { world } from '../physics.js';
-import { scene } from '../scene.js';
+import { scene, camera } from '../scene.js';
 
 class Goalkeeper {
   constructor() {
@@ -12,10 +12,12 @@ class Goalkeeper {
     // Create a group to hold all the parts of the goalkeeper
     this.mesh = new THREE.Group();
     scene.add(this.mesh);
+    camera.layers.enable(1);
 
     // Dedicated light for the goalkeeper
     const keeperLight = new THREE.PointLight(0xffffff, 1, 10);
     keeperLight.position.set(0, 0, 2);
+    keeperLight.layers.set(1);
     this.mesh.add(keeperLight);
 
     // Load FBX Model
@@ -27,6 +29,7 @@ class Goalkeeper {
 
       object.traverse((child) => {
         if (child.isMesh) {
+          child.layers.enable(1);
           child.castShadow = true;
           child.receiveShadow = true;
 
@@ -44,7 +47,7 @@ class Goalkeeper {
               else child.material = materials[0];
 
               materials.forEach(m => {
-                if (m.color) m.color.setHex(0x0000FF); // Blue Kit
+                if (m.color) m.color.setHex(0x116DFF); // Blue Kit
               });
             } else {
               // For body, hair, shoes, etc., ensure white base so texture shows correctly
